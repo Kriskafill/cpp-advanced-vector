@@ -228,14 +228,15 @@ Vector<T>& Vector<T>::operator=(const Vector& rhs) {
             Vector rhs_copy(rhs);
             Swap(rhs_copy);
         }
-        // Зачем выносить else в отдельный метод, если он очень маленький?
         else {
+            std::copy(
+                rhs.data_.GetAddress(),
+                rhs.data_.GetAddress() + std::min(rhs.size_, size_),
+                data_.GetAddress());
             if (rhs.size_ < size_) {
-                std::copy(rhs.data_.GetAddress(), rhs.data_.GetAddress() + rhs.size_, data_.GetAddress());
                 std::destroy_n(data_.GetAddress() + rhs.size_, size_ - rhs.size_);
             }
             else {
-                std::copy(rhs.data_.GetAddress(), rhs.data_.GetAddress() + size_, data_.GetAddress());
                 std::uninitialized_copy_n(
                     rhs.data_.GetAddress() + size_,
                     rhs.size_ - size_,
@@ -363,7 +364,7 @@ Vector<T>::iterator Vector<T>::Emplace(const_iterator pos, Args&&... args) {
 
 template <typename T>
 Vector<T>::iterator Vector<T>::Erase(const_iterator pos) {
-    assert(pos >= begin() && pos <= begin() + size_);
+    assert(pos >= begin() && pos < begin() + size_);
     size_t diff = pos - cbegin();
     std::move(data_.GetAddress() + diff + 1, end(), data_.GetAddress() + diff);
     std::destroy_n(end() - 1, 1);
