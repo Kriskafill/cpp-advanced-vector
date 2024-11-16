@@ -5,8 +5,6 @@
 #include <memory>
 #include <utility>
 
-/* --------------- RawMemory --------------- */
-
 template <typename T>
 class RawMemory {
 public:
@@ -38,8 +36,6 @@ private:
     T* buffer_ = nullptr;
     size_t capacity_ = 0;
 };
-
-/* ---------- RawMemory Realise ---------- */
 
 template <typename T>
 RawMemory<T>::RawMemory(size_t capacity)
@@ -117,8 +113,6 @@ void RawMemory<T>::Deallocate(T* buf) noexcept {
     operator delete(buf);
 }
 
-/* --------------- Vector --------------- */
-
 template <typename T>
 class Vector {
 public:
@@ -164,8 +158,6 @@ private:
     RawMemory<T> data_;
     size_t size_ = 0;
 };
-
-/* ---------- Vector Realise ---------- */
 
 template <typename T>
 Vector<T>::iterator Vector<T>::begin() noexcept {
